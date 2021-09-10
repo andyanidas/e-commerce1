@@ -1,7 +1,17 @@
 // import "firebase/auth"
 import "firebase/compat/auth"
 import firebase from 'firebase/compat/app';
-import {getAuth} from "firebase/firebase-auth";
+// import {getAuth} from "firebase/firebase-auth";
+// import firebase from 'firebase/compat/app';
+import 'firebase/compat/auth';
+import 'firebase/compat/firestore';
+
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+
+const auth = getAuth(firebaseApp);
+onAuthStateChanged(auth, user => {
+    // Check for user status
+});
 
 const app = firebase.initializeApp({
     apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -15,6 +25,5 @@ const app = firebase.initializeApp({
 
 export const auth = app.auth
 
-export const getAuths =  getAuth();
 
 export default app
