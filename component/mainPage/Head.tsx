@@ -6,6 +6,10 @@ import ContactUs from "../contactUs/ContactUs";
 import React, {useState} from "react";
 import Login from "../login/Login";
 import Register from "../login/Register";
+import ResetPassword from "../login/ResetPassword";
+import {AuthProvider} from "../../context/AuthContext";
+// import AppCtx from '../../context/AppContext'
+// import AppContext from "../../context/AppContext";
 
 const Head = () => {
   const {Header} = Layout
@@ -17,7 +21,7 @@ const Head = () => {
     cancelButtonProps:{hidden:true},
     okButtonProps:{hidden:true}
   });
-  const [modal,setModal] = useState("");
+  const [modal,setModal] = useState("login");
 
   const showModal = (prop:any) => {
     switch (prop.title){
@@ -55,6 +59,12 @@ const Head = () => {
           visible: true,
           title: "Your Card",
         });
+      case "resetPass":
+        setVisible({
+          ...visible,
+          visible: true,
+          title: "Reset Password",
+        });
       default:
         break
     }
@@ -63,13 +73,16 @@ const Head = () => {
   const handleOk = () => {
     setVisible({...visible,visible: false});
   }
+  const changeModal =(title:string)=>{
+    setModal(title)
+  }
 
   const handleCancel = () => {
     setVisible({...visible,visible: false});
   }
 
   return (
-    <div>
+    <AuthProvider>
       <Header style={{position: 'relative', zIndex: 0, width: '100%', background: 'unset'}}>
         <Menu theme="light" mode="horizontal" defaultSelectedKeys={['2']}>
           <Menu.Item key="1">{<>
@@ -92,8 +105,9 @@ const Head = () => {
           </Menu.Item>
           <Menu.Item key="4">
             <a type="ghost" onClick={()=>showModal({title:"login"})} title={"Register or Login"}>Register or Login</a>
-            {modal=="login" && <Modal {...visible}>{<Login/>}</Modal>}
-            {modal=="register" && <Modal {...visible}>{<Register/>}</Modal>}
+            {modal=="login" && <Modal {...visible}>{<Login success={handleCancel} modalSwitch={changeModal} />}</Modal>}
+            {modal=="register" && <Modal {...visible} title="Register">{<Register success={handleCancel} modalSwitch={changeModal}/>}</Modal>}
+            {modal=="resetPass" && <Modal {...visible} title="Password Reset">{<ResetPassword success={handleCancel} />}</Modal>}
           </Menu.Item>
           <Menu.Item key="5">
             <a type="ghost" onClick={()=>showModal({title:"basket"})} title={"Basket"}>Basket</a>
@@ -101,7 +115,7 @@ const Head = () => {
           </Menu.Item>
         </Menu>
       </Header>
-    </div>
+    </AuthProvider>
   );
 };
 

@@ -22,12 +22,13 @@ const ContactUs = () => {
   };
 
   return (
-    <div style={{display:"flex" , flexDirection:"row"}}><a>
-      <p>Phone:</p>
-      <p>Fax:</p>
-      <p>Email:</p>
-      <p>Location:</p>
-    </a>
+    <div style={{display:"flex" , flexDirection:"row"}}>
+      <text>
+        <p>Phone:</p>
+        <p>Fax:</p>
+        <p>Email:</p>
+        <p>Location:</p>
+      </text>
       <Form {...layout} name="nest-messages" onFinish={onFinish} validateMessages={validateMessages}>
         <Form.Item name={['user', 'name']} label="Name" rules={[{required: true}]}>
           <Input/>

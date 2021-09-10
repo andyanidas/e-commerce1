@@ -1,10 +1,15 @@
-import { Form, Input, Button, Checkbox } from 'antd';
+import {Form, Input, Button} from 'antd';
+import {useAuth} from "../../context/AuthContext";
 
 
-const Register = () => {
+const Register = (props:any) => {
+  const {signup} = useAuth()
   const onFinish = (values: any) => {
+    // signup(values.)
+    props.success()
     console.log('Success:', values);
   };
+
 
   const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
@@ -36,11 +41,21 @@ const Register = () => {
         <Input.Password />
       </Form.Item>
       <Form.Item
-        label="Password"
-        name="password"
-        rules={[{ required: true, message: 'Please input your password!' }]}
+        label="Password Confirmation"
+        name="passwordConfirm"
+        rules={[{ required: true, message: 'Please confirm your password!' }, ({ getFieldValue }) => ({
+          validator(rule, value) {
+            if (!value || getFieldValue('password') === value) {
+              return Promise.resolve();
+            }
+            return Promise.reject('The two passwords that you entered do not match!');
+          },
+        }),]}
       >
         <Input.Password />
+      </Form.Item>
+      <Form.Item name="remember" valuePropName="checked" wrapperCol={{ offset: 8, span: 16 }}>
+        <a onClick={()=>props.modalSwitch("login")}>I have an account</a>
       </Form.Item>
 
       <Form.Item wrapperCol={{ offset: 8, span: 16 }}>

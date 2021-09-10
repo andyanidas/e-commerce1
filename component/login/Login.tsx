@@ -1,8 +1,15 @@
 import { Form, Input, Button, Checkbox } from 'antd';
+import {useAuth} from "../../context/AuthContext";
+import {useState} from "react";
+import {useModalUpdate} from '../../context/AppContext'
+import Register from "./Register";
 
 
-const Login = () => {
+const Login = (props:any) => {
+  const [isRegister, setIsRegister] = useState(false);
+  // const {signup} = useAuth()
   const onFinish = (values: any) => {
+    props.success()
     console.log('Success:', values);
   };
 
@@ -18,7 +25,7 @@ const Login = () => {
       initialValues={{ remember: true }}
       onFinish={onFinish}
       onFinishFailed={onFinishFailed}
-      autoComplete="on"
+      autoComplete="off"
     >
       <Form.Item
         label="Username"
@@ -37,16 +44,16 @@ const Login = () => {
       </Form.Item>
 
       <Form.Item name="remember" valuePropName="checked" wrapperCol={{ offset: 8, span: 16 }}>
-        <Checkbox>Remember me</Checkbox>
+        <a onClick={()=>props.modalSwitch("resetPass")}>Forgot Password</a>
       </Form.Item>
 
       <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-        <Button type="ghost" onClick={()=>onFinish}>
+        <Button type="ghost" htmlType="submit">
           Login
         </Button>
       </Form.Item>
       <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-        <Button type="default" htmlType="submit">
+        <Button type="default" onClick={()=>props.modalSwitch("register")}>
           Register
         </Button>
       </Form.Item>
