@@ -7,7 +7,7 @@ import React, {useState} from "react";
 import Login from "../login/Login";
 import Register from "../login/Register";
 import ResetPassword from "../login/ResetPassword";
-import {AuthProvider} from "../../context/AuthContext";
+// import {AuthProvider} from "../../context/AuthContext";
 // import AppCtx from '../../context/AppContext'
 // import AppContext from "../../context/AppContext";
 
@@ -82,7 +82,7 @@ const Head = () => {
   }
 
   return (
-    <AuthProvider>
+    <div>
       <Header style={{position: 'relative', zIndex: 0, width: '100%', background: 'unset'}}>
         <Menu theme="light" mode="horizontal" defaultSelectedKeys={['2']}>
           <Menu.Item key="1">{<>
@@ -115,7 +115,7 @@ const Head = () => {
           </Menu.Item>
         </Menu>
       </Header>
-    </AuthProvider>
+    </div>
   );
 };
 

@@ -1,36 +1,14 @@
-import React, {useContext, useEffect, useState} from 'react';
-import {auth} from '../Firebase'
-// import firebase from "firebase";
-import firebase from "firebase/compat/app";
-const AuthContext = React.createContext()
+import { createContext, useContext, Context } from 'react'
+import useFirebaseAuth from '../lib/useFirebaseAuth';
 
+const authUserContext = createContext({
+    authUser: null,
+    loading: true
+});
 
-export function useAuth() {
-    return useContext(AuthContext)
+export function AuthUserProvider({ children }) {
+    const auth = useFirebaseAuth();
+    return <authUserContext.Provider value={auth}>{children}</authUserContext.Provider>;
 }
-
-export function AuthProvider({children}) {
-    const [currentUser, setCurrentUser] = useState()
-
-    function signup(email, password) {
-        return auth.createUserWithEmailAndPassword(email, password)
-    }
-
-    useEffect(() => {
-        // const auth = getAuth();
-        const unsubscribe = firebase.auth().onAuthStateChanged(auth, (user) => {
-            setCurrentUser(user)
-        });
-        return unsubscribe
-    }, [])
-
-    const value = {
-        currentUser,
-        signup,
-    }
-    return (
-        <AuthContext.Provider value={value}>
-            {children}
-        </AuthContext.Provider>
-    );
-};
+// custom hook to use the authUserContext and access authUser and loading
+export const useAuth = () => useContext(authUserContext);

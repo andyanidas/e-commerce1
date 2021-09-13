@@ -1,11 +1,14 @@
 import {Form, Input, Button} from 'antd';
+import {auth} from "../../Firebase";
 import {useAuth} from "../../context/AuthContext";
 
 
 const Register = (props:any) => {
   const {signup} = useAuth()
+
   const onFinish = (values: any) => {
-    // signup(values.)
+    signup(values.name,values.password)
+    // auth.createUserWithEmailAndPassword(values.name, values.password)
     props.success()
     console.log('Success:', values);
   };

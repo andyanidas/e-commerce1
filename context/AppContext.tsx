@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import {useState, useContext} from "react";
 
 interface ModalContext {
@@ -31,13 +31,3 @@ const AppContext = ({children}:any) => {
 };
 
 export default AppContext;
-// // Consume in your app
-//
-// const AppContext = () => {
-//   const appContext = React.useContext(AppCtx);
-//   return (
-//     <div>
-//       Visibility: {appContext?.modalVisibility}, ModalName: {appContext?.modalName}
-//     </div>
-//   );
-// };
