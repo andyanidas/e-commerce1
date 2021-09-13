@@ -10,6 +10,7 @@ import ResetPassword from "../login/ResetPassword";
 // import {AuthProvider} from "../../context/AuthContext";
 // import AppCtx from '../../context/AppContext'
 // import AppContext from "../../context/AppContext";
+import {AuthUserProvider} from "../../context/AuthContext";
 
 const Head = () => {
   const {Header} = Layout
