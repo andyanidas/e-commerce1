@@ -7,13 +7,12 @@ import React, {useState} from "react";
 import Login from "../login/Login";
 import Register from "../login/Register";
 import ResetPassword from "../login/ResetPassword";
-// import {AuthProvider} from "../../context/AuthContext";
-// import AppCtx from '../../context/AppContext'
-// import AppContext from "../../context/AppContext";
-import {AuthUserProvider} from "../../context/AuthContext";
+import {useAuth} from "../../context/AuthContext";
+import {firebaseClient} from "../../firebaseClient";
 
 const Head = () => {
   const {Header} = Layout
+  const { user } = useAuth();
   const [visible, setVisible] = useState({
     visible: false,
     title:"",
@@ -81,6 +80,9 @@ const Head = () => {
   const handleCancel = () => {
     setVisible({...visible,visible: false});
   }
+  const logOut = ()=>{
+    firebaseClient.auth().signOut().then(()=>{alert("Successfully Logged Out!")})
+  }
 
   return (
     <div>
@@ -104,12 +106,16 @@ const Head = () => {
           <Menu.Item key="logo">
             <img src="logo.svg"/>
           </Menu.Item>
-          <Menu.Item key="4">
+
+          {user? <Menu.Item key="4">
+              <a type="ghost" onClick={logOut}>{user.displayName} Login Out</a>
+          </Menu.Item>:
+            <Menu.Item key="4">
             <a type="ghost" onClick={()=>showModal({title:"login"})} title={"Register or Login"}>Register or Login</a>
-            {modal=="login" && <Modal {...visible}>{<Login success={handleCancel} modalSwitch={changeModal} />}</Modal>}
-            {modal=="register" && <Modal {...visible} title="Register">{<Register success={handleCancel} modalSwitch={changeModal}/>}</Modal>}
-            {modal=="resetPass" && <Modal {...visible} title="Password Reset">{<ResetPassword success={handleCancel} />}</Modal>}
-          </Menu.Item>
+          {modal=="login" && <Modal {...visible}>{<Login success={handleCancel} modalSwitch={changeModal} />}</Modal>}
+          {modal=="register" && <Modal {...visible} title="Register">{<Register success={handleCancel} modalSwitch={changeModal}/>}</Modal>}
+          {modal=="resetPass" && <Modal {...visible} title="Password Reset">{<ResetPassword success={handleCancel} />}</Modal>}
+            </Menu.Item>}
           <Menu.Item key="5">
             <a type="ghost" onClick={()=>showModal({title:"basket"})} title={"Basket"}>Basket</a>
             {modal=="checkOut" && <Modal {...visible}>{"Check Out"}</Modal>}

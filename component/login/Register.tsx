@@ -1,13 +1,16 @@
 import {Form, Input, Button} from 'antd';
+import {firebaseClient} from "../../firebaseClient";
 
 const Register = (props:any) => {
   // const {signup} = useAuth()
 
-  const onFinish = (values: any) => {
-    // signup(values.name,values.password)
-    // auth.createUserWithEmailAndPassword(values.name, values.password)
+  const onFinish =async (values: any) => {
+      await firebaseClient
+        .auth()
+        .createUserWithEmailAndPassword(values.username, values.password);
+      window.location.href = '/';
+
     props.success()
-    console.log('Success:', values);
   };
 
 
@@ -44,7 +47,7 @@ const Register = (props:any) => {
         label="Password Confirmation"
         name="passwordConfirm"
         rules={[{ required: true, message: 'Please confirm your password!' }, ({ getFieldValue }) => ({
-          validator(rule, value) {
+          validator(_rule ,value) {
             if (!value || getFieldValue('password') === value) {
               return Promise.resolve();
             }
@@ -59,7 +62,7 @@ const Register = (props:any) => {
       </Form.Item>
 
       <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-        <Button type="default" htmlType="submit">
+        <Button type="ghost" htmlType="submit">
           Register
         </Button>
       </Form.Item>

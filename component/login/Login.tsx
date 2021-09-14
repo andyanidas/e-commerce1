@@ -1,16 +1,15 @@
-import { Form, Input, Button, Checkbox } from 'antd';
-import {useAuth} from "../../context/AuthContext";
-import {useState} from "react";
-import {useModalUpdate} from '../../context/AppContext'
-import Register from "./Register";
+import { Form, Input, Button } from 'antd';
+import {firebaseClient} from "../../firebaseClient";
 
 
 const Login = (props:any) => {
-  const [isRegister, setIsRegister] = useState(false);
-  // const {signup} = useAuth()
-  const onFinish = (values: any) => {
-    props.success()
-    console.log('Success:', values);
+  const onFinish = async (values: any) => {
+
+    await firebaseClient.auth().signInWithEmailAndPassword(values.username, values.password).then(()=> {
+      props.success();
+      window.location.href = '/';
+    }).catch(err => alert(err));
+
   };
 
   const onFinishFailed = (errorInfo: any) => {
