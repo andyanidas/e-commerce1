@@ -19,6 +19,7 @@ const validateMessages = {
 
 const ContactUs = () => {
   const onFinish = (values: any) => {
+    console.log(values)
   };
 
   return (

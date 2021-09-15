@@ -17,7 +17,7 @@ export function useModalUpdate(){
 const AppContext = ({children}:any) => {
   const [modalState, setModalState] = useState<ModalContext>()
   function updateModalInfo(){
-    // setModalState(...modalState, {modalName: "register"})
+    setModalState({modalName: "register", modalVisibility: true})
   }
 
 

@@ -1,19 +1,34 @@
 import React, { useState, useEffect, useContext, createContext } from "react";
 import nookies from "nookies";
-import { firebaseClient } from "../firebaseClient";
+import { getAuth } from "firebase/auth";
+import {initializeApp} from "firebase/app";
 
-const AuthContext = createContext<{ user: firebaseClient.User | null }>({
+const firebaseConfig = {
+    apiKey: "AIzaSyBMAPXQR7Hdw3Ooy_HxbAIxdbGPnkC1w7w",
+    authDomain: "auth-developer-66d68.firebaseapp.com",
+    projectId: "auth-developer-66d68",
+    storageBucket: "auth-developer-66d68.appspot.com",
+    messagingSenderId: "920196545382",
+    appId: "1:920196545382:web:074656a3ce914f6e7966a7"
+};
+
+initializeApp(firebaseConfig);
+const auth = getAuth();
+
+
+const AuthContext = createContext<{ user: any | null }>({
     user: null,
 });
 
 export function AuthProvider({ children }: any) {
-    const [user, setUser] = useState<firebaseClient.User | null>(null);
+    const [user, setUser] = useState< any| null>(null);
 
     useEffect(() => {
+        setUser(auth.currentUser);
         if (typeof window !== "undefined") {
             (window as any).nookies = nookies;
         }
-        return firebaseClient.auth().onIdTokenChanged(async (user) => {
+        return auth.onIdTokenChanged(async (user) => {
             console.log(`token changed!`);
             if (!user) {
                 console.log(`no token found...`);
@@ -35,7 +50,6 @@ export function AuthProvider({ children }: any) {
     useEffect(() => {
         const handle = setInterval(async () => {
             console.log(`refreshing token...`);
-            const user = firebaseClient.auth().currentUser;
             if (user) await user.getIdToken(true);
         }, 10 * 60 * 1000);
         return () => clearInterval(handle);

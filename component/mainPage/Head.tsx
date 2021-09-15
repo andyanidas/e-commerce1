@@ -8,23 +8,23 @@ import Login from "../login/Login";
 import Register from "../login/Register";
 import ResetPassword from "../login/ResetPassword";
 import {useAuth} from "../../context/AuthContext";
-import {firebaseClient} from "../../firebaseClient";
+import {getAuth, signOut} from "firebase/auth";
 
 const Head = () => {
   const {Header} = Layout
-  const { user } = useAuth();
+  const {user} = useAuth();
   const [visible, setVisible] = useState({
     visible: false,
-    title:"",
-    onOk:()=>handleOk(),
-    onCancel:()=>handleCancel(),
-    cancelButtonProps:{hidden:true},
-    okButtonProps:{hidden:true}
+    title: "",
+    onOk: () => handleOk(),
+    onCancel: () => handleCancel(),
+    cancelButtonProps: {hidden: true},
+    okButtonProps: {hidden: true}
   });
-  const [modal,setModal] = useState("login");
+  const [modal, setModal] = useState("login");
 
-  const showModal = (prop:any) => {
-    switch (prop.title){
+  const showModal = (prop: any) => {
+    switch (prop.title) {
       case "about":
         setVisible({
           ...visible,
@@ -71,17 +71,30 @@ const Head = () => {
     setModal(prop.title)
   }
   const handleOk = () => {
-    setVisible({...visible,visible: false});
+    setVisible({...visible, visible: false});
   }
-  const changeModal =(title:string)=>{
+  const changeModal = (title: string) => {
     setModal(title)
   }
 
   const handleCancel = () => {
-    setVisible({...visible,visible: false});
+    setVisible({...visible, visible: false});
   }
-  const logOut = ()=>{
-    firebaseClient.auth().signOut().then(()=>{alert("Successfully Logged Out!")})
+  const {confirm} = Modal;
+  const logOut = () => {
+    confirm({
+      title: 'Do you Want Log out ?',
+      content: 'Logging out confirmation',
+      onOk() {
+        signOut(getAuth()).then(() => {
+          // Sign-out successful.
+        }).catch((error) => {
+          console.error(error)
+        });
+      },
+      onCancel() {
+      },
+    });
   }
 
   return (
@@ -94,31 +107,35 @@ const Head = () => {
             </Link></>}
           </Menu.Item>
           <Menu.Item key="2">{<>
-            <a type="ghost" onClick={()=>showModal({title:"about"})} title={"About Us"}>About US</a>
-            {modal=="about" && <Modal {...visible} cancelButtonProps={{hidden:true}}>{<Temp/>}</Modal>}
+            <a type="ghost" onClick={() => showModal({title: "about"})} title={"About Us"}>About US</a>
+            {modal == "about" && <Modal {...visible} cancelButtonProps={{hidden: true}}>{<Temp/>}</Modal>}
           </>
           }</Menu.Item>
           <Menu.Item key="3">{<>
-            <a type="ghost" onClick={()=>showModal({title:"contact"})} title={"Contact Us"}>Contact Us</a>
-            {modal=="contact" && <Modal {...visible}>{<ContactUs/>}</Modal>}
+            <a type="ghost" onClick={() => showModal({title: "contact"})} title={"Contact Us"}>Contact Us</a>
+            {modal == "contact" && <Modal {...visible}>{<ContactUs/>}</Modal>}
           </>
           }</Menu.Item>
           <Menu.Item key="logo">
             <img src="logo.svg"/>
           </Menu.Item>
 
-          {user? <Menu.Item key="4">
+          {user ? <Menu.Item key="4">
               <a type="ghost" onClick={logOut}>{user.displayName} Login Out</a>
-          </Menu.Item>:
+            </Menu.Item> :
             <Menu.Item key="4">
-            <a type="ghost" onClick={()=>showModal({title:"login"})} title={"Register or Login"}>Register or Login</a>
-          {modal=="login" && <Modal {...visible}>{<Login success={handleCancel} modalSwitch={changeModal} />}</Modal>}
-          {modal=="register" && <Modal {...visible} title="Register">{<Register success={handleCancel} modalSwitch={changeModal}/>}</Modal>}
-          {modal=="resetPass" && <Modal {...visible} title="Password Reset">{<ResetPassword success={handleCancel} />}</Modal>}
+              <a type="ghost" onClick={() => showModal({title: "login"})} title={"Register or Login"}>Register or
+                Login</a>
+              {modal == "login" &&
+              <Modal {...visible}>{<Login success={handleCancel} modalSwitch={changeModal}/>}</Modal>}
+              {modal == "register" && <Modal {...visible} title="Register">{<Register success={handleCancel}
+                                                                                      modalSwitch={changeModal}/>}</Modal>}
+              {modal == "resetPass" &&
+              <Modal {...visible} title="Password Reset">{<ResetPassword success={handleCancel}/>}</Modal>}
             </Menu.Item>}
           <Menu.Item key="5">
-            <a type="ghost" onClick={()=>showModal({title:"basket"})} title={"Basket"}>Basket</a>
-            {modal=="checkOut" && <Modal {...visible}>{"Check Out"}</Modal>}
+            <a type="ghost" onClick={() => showModal({title: "basket"})} title={"Basket"}>Basket</a>
+            {modal == "checkOut" && <Modal {...visible}>{"Check Out"}</Modal>}
           </Menu.Item>
         </Menu>
       </Header>

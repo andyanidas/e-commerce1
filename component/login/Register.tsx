@@ -1,14 +1,18 @@
-import {Form, Input, Button} from 'antd';
-import {firebaseClient} from "../../firebaseClient";
+import {Button, Form, Input} from 'antd';
+import { getDatabase,ref, set } from "firebase/database";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 
-const Register = (props:any) => {
-  // const {signup} = useAuth()
+const Register = (props: any) => {
+  const onFinish = async (values: any) => {
+    const dataBase = getDatabase()
+    await createUserWithEmailAndPassword(getAuth() ,values.username, values.password)
 
-  const onFinish =async (values: any) => {
-      await firebaseClient
-        .auth()
-        .createUserWithEmailAndPassword(values.username, values.password);
-      window.location.href = '/';
+    await set(ref(dataBase, 'users/' + values.username), {
+      username: values.username,
+      email: values.username,
+      password: values.password
+    });
+    window.location.href = '/';
 
     props.success()
   };
@@ -21,9 +25,9 @@ const Register = (props:any) => {
   return (
     <Form
       name="basic"
-      labelCol={{ span: 8 }}
-      wrapperCol={{ span: 16 }}
-      initialValues={{ remember: true }}
+      labelCol={{span: 8}}
+      wrapperCol={{span: 16}}
+      initialValues={{remember: true}}
       onFinish={onFinish}
       onFinishFailed={onFinishFailed}
       autoComplete="off"
@@ -31,23 +35,23 @@ const Register = (props:any) => {
       <Form.Item
         label="Username"
         name="username"
-        rules={[{ required: true, message: 'Please input your username!' }]}
+        rules={[{required: true, message: 'Please input your username!'}]}
       >
-        <Input />
+        <Input/>
       </Form.Item>
 
       <Form.Item
         label="Password"
         name="password"
-        rules={[{ required: true, message: 'Please input your password!' }]}
+        rules={[{required: true, message: 'Please input your password!'}]}
       >
-        <Input.Password />
+        <Input.Password/>
       </Form.Item>
       <Form.Item
         label="Password Confirmation"
         name="passwordConfirm"
-        rules={[{ required: true, message: 'Please confirm your password!' }, ({ getFieldValue }) => ({
-          validator(_rule ,value) {
+        rules={[{required: true, message: 'Please confirm your password!'}, ({getFieldValue}) => ({
+          validator(_rule, value) {
             if (!value || getFieldValue('password') === value) {
               return Promise.resolve();
             }
@@ -55,13 +59,13 @@ const Register = (props:any) => {
           },
         }),]}
       >
-        <Input.Password />
+        <Input.Password/>
       </Form.Item>
-      <Form.Item name="remember" valuePropName="checked" wrapperCol={{ offset: 8, span: 16 }}>
-        <a onClick={()=>props.modalSwitch("login")}>I have an account</a>
+      <Form.Item name="remember" valuePropName="checked" wrapperCol={{offset: 8, span: 16}}>
+        <a onClick={() => props.modalSwitch("login")}>I have an account</a>
       </Form.Item>
 
-      <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+      <Form.Item wrapperCol={{offset: 8, span: 16}}>
         <Button type="ghost" htmlType="submit">
           Register
         </Button>

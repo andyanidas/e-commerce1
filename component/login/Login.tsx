@@ -1,11 +1,10 @@
 import { Form, Input, Button } from 'antd';
-import {firebaseClient} from "../../firebaseClient";
-
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 const Login = (props:any) => {
   const onFinish = async (values: any) => {
 
-    await firebaseClient.auth().signInWithEmailAndPassword(values.username, values.password).then(()=> {
+    await signInWithEmailAndPassword(getAuth(), values.username, values.password).then(()=> {
       props.success();
       window.location.href = '/';
     }).catch(err => alert(err));
