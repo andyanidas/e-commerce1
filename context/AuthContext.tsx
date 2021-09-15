@@ -1,18 +1,27 @@
 import React, { useState, useEffect, useContext, createContext } from "react";
 import nookies from "nookies";
 import { getAuth } from "firebase/auth";
-import {initializeApp} from "firebase/app";
+import {getApps, initializeApp} from "firebase/app";
+import { getFirestore } from 'firebase/firestore'
 
 const firebaseConfig = {
     apiKey: "AIzaSyBMAPXQR7Hdw3Ooy_HxbAIxdbGPnkC1w7w",
     authDomain: "auth-developer-66d68.firebaseapp.com",
     projectId: "auth-developer-66d68",
     storageBucket: "auth-developer-66d68.appspot.com",
+    // databaseURL:"https://auth-developer-66d68-default-rtdb.firebaseio.com/",
     messagingSenderId: "920196545382",
     appId: "1:920196545382:web:074656a3ce914f6e7966a7"
 };
 
-initializeApp(firebaseConfig);
+let firebaseApp :any;
+
+try{
+    firebaseApp = initializeApp(firebaseConfig)
+}catch (e){
+    firebaseApp = getApps()
+}
+// export {};
 const auth = getAuth();
 
 
@@ -59,7 +68,8 @@ export function AuthProvider({ children }: any) {
         <AuthContext.Provider value={{ user }}>{children}</AuthContext.Provider>
     );
 }
-
+const db =  getFirestore(firebaseApp)
+export {db}
 export const useAuth = () => {
     return useContext(AuthContext);
 };

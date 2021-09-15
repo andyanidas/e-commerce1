@@ -1,17 +1,23 @@
 import {Button, Form, Input} from 'antd';
-import { getDatabase,ref, set } from "firebase/database";
+import {collection,addDoc } from "firebase/firestore";
+// import {getDatabase} from "firebase/database";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import {db} from '../../context/AuthContext'
 
 const Register = (props: any) => {
   const onFinish = async (values: any) => {
-    const dataBase = getDatabase()
+    // console.log("database: ", dataBase)
     await createUserWithEmailAndPassword(getAuth() ,values.username, values.password)
-
-    await set(ref(dataBase, 'users/' + values.username), {
-      username: values.username,
-      email: values.username,
-      password: values.password
+    const usersCollectionRef = collection(db, 'users');
+    await addDoc(usersCollectionRef, {
+      name: values.username,
+      country: values.password
     });
+    // await setDoc(doc(dataBase, '/users/' + newUser.user.uid), {
+    //   username: values.username,
+    //   email: values.username,
+    //   password: values.password
+    // });
     window.location.href = '/';
 
     props.success()
