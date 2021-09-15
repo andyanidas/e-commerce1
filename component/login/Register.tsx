@@ -7,11 +7,12 @@ import {db} from '../../context/AuthContext'
 const Register = (props: any) => {
   const onFinish = async (values: any) => {
     // console.log("database: ", dataBase)
-    await createUserWithEmailAndPassword(getAuth() ,values.username, values.password)
-    const usersCollectionRef = collection(db, 'users');
+    await createUserWithEmailAndPassword(getAuth() ,values.email, values.password)
+    const usersCollectionRef = collection(db, ('users' + values.name));
     await addDoc(usersCollectionRef, {
-      name: values.username,
-      country: values.password
+      email: values.email,
+      username: values.username,
+      password: values.password
     });
     // await setDoc(doc(dataBase, '/users/' + newUser.user.uid), {
     //   username: values.username,
@@ -45,7 +46,13 @@ const Register = (props: any) => {
       >
         <Input/>
       </Form.Item>
-
+      <Form.Item
+        label="E-mail"
+        name="email"
+        rules={[{required: true, message: 'Please input your email!'}]}
+      >
+        <Input/>
+      </Form.Item>
       <Form.Item
         label="Password"
         name="password"
