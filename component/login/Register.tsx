@@ -2,14 +2,11 @@ import {Form, Input, Button} from 'antd';
 import {firebaseClient} from "../../firebaseClient";
 
 const Register = (props:any) => {
-  // const {signup} = useAuth()
-
   const onFinish =async (values: any) => {
       await firebaseClient
         .auth()
         .createUserWithEmailAndPassword(values.username, values.password);
       window.location.href = '/';
-
     props.success()
   };
 

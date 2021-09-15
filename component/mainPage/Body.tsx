@@ -1,4 +1,4 @@
-import {Layout} from 'antd'
+import {Button, Layout} from 'antd'
 
 const Body = () => {
   const {Content} = Layout
@@ -6,13 +6,12 @@ const Body = () => {
   return (
     <div>
       <Content style={{verticalAlign: 'center'}}>
-        <p>asdasdasdddddddddddddddddddd</p>
-        <p>asdasdasdddddddddddddddddddd</p>
-        <p>asdasdasdddddddddddddddddddd</p>
+        <p>First line</p>
         <p>asdasdasdddddddddddddddddddd</p>
 
+        <Button style={{float:"right"}} href= '/dashboard'>Dashboard</Button>
 
-        <p>asdasdasdddddddddddddddddddd</p>
+        <p>Last Line</p>
       </Content>
     </div>
   );
