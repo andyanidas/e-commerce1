@@ -14,6 +14,7 @@ const Register = (props: any) => {
       username: values.username,
       password: values.password
     });
+    values.ema
     // await setDoc(doc(dataBase, '/users/' + newUser.user.uid), {
     //   username: values.username,
     //   email: values.username,
