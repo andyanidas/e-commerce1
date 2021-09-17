@@ -128,8 +128,9 @@ const Head = () => {
                 Login</a>
               {modal == "login" &&
               <Modal {...visible}>{<Login success={handleCancel} modalSwitch={changeModal}/>}</Modal>}
-              {modal == "register" && <Modal {...visible} title="Register">{<Register success={handleCancel}
-                                                                                      modalSwitch={changeModal}/>}</Modal>}
+              {modal == "register" && <Modal {...visible} title="Register">
+                {<Register success={handleCancel} modalSwitch={changeModal}/>}
+              </Modal>}
               {modal == "resetPass" &&
               <Modal {...visible} title="Password Reset">{<ResetPassword success={handleCancel}/>}</Modal>}
             </Menu.Item>}
