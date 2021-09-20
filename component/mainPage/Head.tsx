@@ -10,6 +10,9 @@ import ResetPassword from "../login/ResetPassword";
 import {useAuth} from "../../context/AuthContext";
 import {getAuth, signOut} from "firebase/auth";
 
+
+
+
 const Head = () => {
   const {Header} = Layout
   const {user} = useAuth();
@@ -59,12 +62,14 @@ const Head = () => {
           visible: true,
           title: "Your Card",
         });
+        break
       case "resetPass":
         setVisible({
           ...visible,
           visible: true,
           title: "Reset Password",
         });
+        break
       default:
         break
     }
@@ -101,10 +106,10 @@ const Head = () => {
     <div>
       <Header style={{position: 'relative', zIndex: 0, width: '100%', background: 'unset'}}>
         <Menu theme="light" mode="horizontal" defaultSelectedKeys={['2']}>
-          <Menu.Item key="1">{<>
+          <Menu.Item key="1">{
             <Link href="/">
               <a title="Home Page">Home</a>
-            </Link></>}
+            </Link>}
           </Menu.Item>
           <Menu.Item key="2">{<>
             <a type="ghost" onClick={() => showModal({title: "about"})} title={"About Us"}>About US</a>
@@ -117,11 +122,11 @@ const Head = () => {
           </>
           }</Menu.Item>
           <Menu.Item key="logo">
-            <img src="logo.svg"/>
+            <img src="logo.svg" alt={"logo"}/>
           </Menu.Item>
 
           {user ? <Menu.Item key="4">
-              <a type="ghost" onClick={logOut}>{user.displayName} Login Out</a>
+              <a type="ghost" onClick={logOut}>{user.displayName} Log Out</a>
             </Menu.Item> :
             <Menu.Item key="4">
               <a type="ghost" onClick={() => showModal({title: "login"})} title={"Register or Login"}>Register or

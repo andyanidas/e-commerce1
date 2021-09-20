@@ -1,26 +1,28 @@
-import {Button, Form, Input} from 'antd';
-import {doc,setDoc } from "firebase/firestore";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import {db} from '../../context/AuthContext'
+import {Alert, Button, Form, Input, Select} from 'antd';
+import {userService} from "../../services/userService";
+import {User} from "../../pages/dashboard/util/models";
+import {ReactElement, useState} from "react";
 
-interface user{
-  username: string
-  password: string
-  email:string
-}
+
 
 const Register = (props: any) => {
-  const onFinish = async (values: user) => {
-    // console.log("database: ", dataBase)
-    await createUserWithEmailAndPassword(getAuth() ,values.email, values.password)
-    await setDoc(doc(db,"users",values.username),{
-      email: values.email,
-      username: values.username,
-      password: values.password,
-      role: "user"
+  const [error, setError] = useState<ReactElement>()
+  const {Option} = Select;
+  const onFinish = async (values: User) => {
+    await userService.registerUser(values).then((v)=>{
+      console.log(v)
+      // window.location.href = '/';
+
+      // props.success()
+    }).catch((e)=>{ //NOT FINISHED
+      switch (e) {
+        case "auth/email-already-in-use":
+          setError(<Alert message="Error Text" type="error" />)
+          console.log(error)
+          break
+      }
     });
-    window.location.href = '/';
-    props.success()
+
   };
 
 
@@ -53,9 +55,18 @@ const Register = (props: any) => {
         <Input/>
       </Form.Item>
       <Form.Item
+        label="Gender"
+        name="gender"
+        required={true}>
+        <Select>
+          <Option value="male">MALE</Option>
+          <Option value="female">FEMALE</Option>
+        </Select>
+      </Form.Item>
+      <Form.Item
         label="Password"
         name="password"
-        rules={[{required: true, message: 'Please input your password!'}]}
+        rules={[{required: true, message: 'Password length must be more than 8 characters', min:8, max:16}]}
       >
         <Input.Password/>
       </Form.Item>

@@ -1,0 +1,5 @@
+export const productTypes:string[] = ["Consume","Wearing","Electronic"]
+export const shopTypes:string[]  = ["In City","In Country","Worldwide"]
+export const measurementTypes:string[] = ["Kilogram","Gram","Liter","Amount Number","Meter"]
+export const statusType:string[] = ["Available","Paid","Sold","Waiting for payment"]
+export const userType:string[] = ["customer","shop owner","cook"]

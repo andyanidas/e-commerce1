@@ -5,10 +5,10 @@ const Login = (props:any) => {
   const onFinish = async (values: any) => {
 
     await signInWithEmailAndPassword(getAuth(), values.username, values.password).then(()=> {
-      props.success();
+
       window.location.href = '/';
     }).catch(err => alert(err));
-
+    props.success();
   };
 
   const onFinishFailed = (errorInfo: any) => {
