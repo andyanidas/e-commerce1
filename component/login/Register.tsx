@@ -1,26 +1,37 @@
-import {Alert, Button, Form, Input, Select} from 'antd';
+import { Button, Form, Input, Select} from 'antd';
 import {userService} from "../../services/userService";
-import {User} from "../../pages/dashboard/util/models";
-import {ReactElement, useState} from "react";
+import {User} from "../util/models";
+import { useState} from "react";
 
 
 
 const Register = (props: any) => {
-  const [error, setError] = useState<ReactElement>()
+  // const [error, setError] = useState<ReactElement>()
+  const [errorMsg, setErrorMsg] = useState<string>("")
+  const [validating, setValidating] = useState<any>("")
+  const [showError, setShowError] = useState<boolean>(false)
   const {Option} = Select;
   const onFinish = async (values: User) => {
-    await userService.registerUser(values).then((v)=>{
-      console.log(v)
+    setValidating("validating")
+    await userService.registerUser(values).then(()=>{
+      setValidating("")
+      console.log("inside then and the error is : ", errorMsg)
       // window.location.href = '/';
-
+      console.log(validating)
       // props.success()
     }).catch((e)=>{ //NOT FINISHED
-      switch (e) {
+
+      switch (e.code) {
         case "auth/email-already-in-use":
-          setError(<Alert message="Error Text" type="error" />)
-          console.log(error)
+          setErrorMsg("Email is already in use")
+          console.log(errorMsg)
           break
+        case "auth/invalid-email":
+          setErrorMsg("Invalid Email!")
       }
+      console.log("inside then and the error is : ", e)
+      setShowError(true)
+      setValidating("error")
     });
 
   };
@@ -39,18 +50,29 @@ const Register = (props: any) => {
       onFinish={onFinish}
       onFinishFailed={onFinishFailed}
       autoComplete="off"
+      size = "small"
     >
       <Form.Item
         label="Username"
         name="username"
-        rules={[{required: true, message: 'Please input your username!'}]}
+        rules={[{
+          required: true,
+          message: 'Please input a valid username!',
+          pattern: new RegExp("^(?=[a-zA-Z0-9._]{4,20}$)(?!.*[_.]{2})[^_.].*[^_.]$")
+        }]}
       >
         <Input/>
       </Form.Item>
       <Form.Item
         label="E-mail"
         name="email"
-        rules={[{required: true, message: 'Please input your email!'}]}
+        required={true}
+        // validateStatus={validating}
+        help={showError ? errorMsg:""}
+        validateStatus={showError? "error": ""}
+        // required={true}
+        // rules={[{required: true, message: 'Please input your email!'}]}
+
       >
         <Input/>
       </Form.Item>

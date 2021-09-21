@@ -1,7 +1,7 @@
 import moment from "moment";
 import {collection, doc, setDoc} from "firebase/firestore";
 import {db} from "../context/AuthContext";
-import {Product} from "../pages/dashboard/util/models";
+import {Product} from "../component/util/models";
 
 function  addProduct(values:Product):Promise<any>{
  const productCode = values.typeId.substring(0,2) + moment().format('MDhmmss');

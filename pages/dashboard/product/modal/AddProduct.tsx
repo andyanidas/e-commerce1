@@ -1,6 +1,6 @@
 import {Button, Form, Input, InputNumber, Select} from "antd";
-import {Product} from "../../util/models";
-import {measurementTypes, productTypes} from "../../util/types"
+import {Product} from "../../../../component/util/models";
+import {measurementTypes, productTypes} from "../../../../component/util/types"
 
 const AddProduct = (props: any) => {
   const onFinish = (values: Product) => {

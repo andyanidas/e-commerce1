@@ -1,6 +1,6 @@
 import {collection, doc, setDoc} from "firebase/firestore";
 import {db} from "../context/AuthContext";
-import {User} from "../pages/dashboard/util/models";
+import {User} from "../component/util/models";
 import {createUserWithEmailAndPassword, getAuth} from "firebase/auth";
 import moment from "moment";
 
@@ -47,4 +47,8 @@ export const userService = {
   getAllProductOfShop,
   getAllProductOfSeries,
   getOneProduct
+}
+
+export default {
+
 }

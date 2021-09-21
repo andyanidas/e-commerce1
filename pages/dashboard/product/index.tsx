@@ -5,8 +5,9 @@ import {Button, Modal,List, Avatar} from "antd";
 import {collection,doc, setDoc } from "firebase/firestore";
 import {db} from "../../../context/AuthContext";
 // import moment from "moment";
-import {Product} from "../util/models";
+import {Product} from "../../../component/util/models";
 import {productService} from "../../../services/productService"
+import { getDatabase, ref, child, get } from "firebase/database";
 
 
 
@@ -15,8 +16,24 @@ const Index = () => {
   const [isAddProductVisible, setIsAddProductVisible] = useState(false);
   const [productList, setProductList] = useState<Product[]>()
   const citiesRef = collection(db, "shops");
+  let myDat:any;
+  const dbRef = ref(getDatabase());
+  get(child(dbRef, `shops`)).then((snapshot) => {
+    if (snapshot.exists()) {
+      console.log(snapshot.val());
+      myDat = snapshot.val();
+    } else {
+      console.log("No data available");
+    }
+  }).catch((error) => {
+    console.error(error);
+  });
+
+
+
 
   const addSamples:any =()=>{
+
      setDoc(doc(citiesRef, "secondShop"), {
        name: "Second Shop", id: 2, code: "UB0002",
        logo: "", type: "хот дотор",
@@ -28,7 +45,8 @@ const Index = () => {
          latitude:"47.920807",
          phone: "99889988",
          responsibleStaff:"Erdene",
-         email:"asdasd@Asd.com"
+         email:"asdasd@Asd.com",
+         shopId: myDat.getUid(),
        }
      });
 
